@@ -42,7 +42,7 @@ private final class SharedApplicationContext {
 class AppDelegate: NSResponder, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate {
    
 
-    @IBOutlet weak var window: Window! {
+    @IBOutlet weak var window: FullContentWindow! {
         didSet {
             window.delegate = self
             window.isOpaque = true
@@ -91,7 +91,23 @@ class AppDelegate: NSResponder, NSApplicationDelegate, NSUserNotificationCenterD
         return  Bundle.main.bundleIdentifier!
     }
 
-   
+    public func windowWillEnterFullScreen(_ notification: Notification) {
+        
+        if #available(OSX 10.12, *) {
+            window.titleBarAccessoryViewController.isHidden = true
+        } else {
+            // Fallback on earlier versions
+        }
+        
+    }
+    
+    public func windowWillExitFullScreen(_ notification: Notification) {
+        if #available(OSX 10.12, *) {
+            window.titleBarAccessoryViewController.isHidden = false
+        } else {
+            
+        }
+    }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         

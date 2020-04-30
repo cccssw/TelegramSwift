@@ -81,10 +81,19 @@ public class NavigationBarView: View {
         return true
     }
     
+    public func reLayout(){
+        layout(left: leftView, center: centerView, right: rightView)
+    }
     
     func layout(left: BarView, center: BarView, right: BarView, force: Bool = false) -> Void {
         
         //
+        var startX = (self.window as? FullContentWindow)?.adjustMinX ?? CGFloat(0)
+        let globalPoint = self.convert(frame.origin, to: nil)
+        
+        if globalPoint.x >= startX {
+            startX = 0
+        }
 
         if frame.height > 0 {
             //proportions = 50 / 25 / 25
@@ -92,10 +101,13 @@ public class NavigationBarView: View {
             let leftWidth = left.isFitted ? left.frame.width : left.fit(to: (right.frame.width == right.minWidth ? frame.width / 3 : frame.width / 4))
             let rightWidth = right.isFitted ? right.frame.width : right.fit(to: (left.frame.width == left.minWidth ? frame.width / 3 : frame.width / 4))
             
-            left.frame = NSMakeRect(0, 0, leftWidth, frame.height - .borderSize);
-            center.frame = NSMakeRect(left.frame.maxX, 0, frame.width - (leftWidth + rightWidth), frame.height - .borderSize);
+            left.frame = NSMakeRect(startX, 0, leftWidth, frame.height - .borderSize);
+            center.frame = NSMakeRect(left.frame.maxX, 0, frame.width - (leftWidth + rightWidth + startX), frame.height - .borderSize);
             right.frame = NSMakeRect(center.frame.maxX, 0, rightWidth, frame.height - .borderSize);
         }
+        
+        
+        
     }
     
     // ! PUSH !

@@ -329,8 +329,9 @@ class AuthHeaderView : View {
         proxyButton.setFrameOrigin(frame.width - proxyButton.frame.width - 15, 15)
         
         containerView.center()
-        
-        cancelButton.setFrameOrigin(15, 15)
+
+        cancelButton.setFrameOrigin(15 +
+            ( (self.window as? FullContentWindow)?.adjustMinX ?? CGFloat(0) ), 15)
 
         self.exportTokenView?.setFrameSize(NSMakeSize(300, 500))
         self.exportTokenView?.center()

@@ -500,6 +500,7 @@ open class NavigationViewController: ViewController, CALayerDelegate,CAAnimation
         containerView.frame = bounds
         navigationBar.frame = NSMakeRect(0, navigationBar.frame.minY, containerView.frame.width, controller.bar.height)
         navigationRightBorder.frame = NSMakeRect(size.width - .borderSize, 0, .borderSize, navigationBar.frame.height)
+        navigationBar.reLayout()
     }
     
     public func cancelCurrentController() {
