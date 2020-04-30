@@ -263,7 +263,6 @@ class PeerListContainerView : View {
     fileprivate let proxyButton:ImageButton = ImageButton()
     private let proxyConnecting: ProgressIndicator = ProgressIndicator(frame: NSMakeRect(0, 0, 11, 11))
     private var searchState: SearchFieldState = .None
-    
 
     var mode: PeerListMode = .plain {
         didSet {
@@ -289,6 +288,7 @@ class PeerListContainerView : View {
         searchContainer.addSubview(proxyButton)
         searchContainer.addSubview(searchView)
         proxyButton.addSubview(proxyConnecting)
+
         setFrameSize(frameRect.size)
         updateLocalizationAndTheme(theme: theme)
         proxyButton.disableActions()
@@ -324,7 +324,7 @@ class PeerListContainerView : View {
     
     func searchStateChanged(_ state: SearchFieldState, animated: Bool) {
         self.searchState = state
-        searchView.change(size: NSMakeSize(state == .Focus || !mode.isPlain ? frame.width - searchView.frame.minX * 2 : (frame.width - (36 + compose.frame.width) - (proxyButton.isHidden ? 0 : proxyButton.frame.width + 12)), 30), animated: animated)
+        searchView.change(size: NSMakeSize(state == .Focus || !mode.isPlain ? searchContainer.frame.width - 10 : (searchContainer.frame.width - (12 + compose.frame.width) - (proxyButton.isHidden ? 0 : proxyButton.frame.width + 3)), 30), animated: animated)
         compose.change(opacity: state == .Focus ? 0 : 1, animated: animated)
         proxyButton.change(opacity: state == .Focus ? 0 : 1, animated: animated)
     }
@@ -372,11 +372,13 @@ class PeerListContainerView : View {
             }
         }
         
-        searchContainer.frame = NSMakeRect(0, 0, frame.width, offset)
+        var adjustCTx = (self.window as? FullContentWindow)?.adjustMinX ?? CGFloat(0)
+        adjustCTx += 10
+        searchContainer.frame = NSMakeRect(adjustCTx, 0, frame.width - adjustCTx, offset)
 
+        let containerFrame = searchContainer.frame
         
-        searchView.setFrameSize(NSMakeSize(searchState == .Focus || !mode.isPlain ? frame.width - searchView.frame.minX * 2 : (frame.width - (36 + compose.frame.width) - (proxyButton.isHidden ? 0 : proxyButton.frame.width + 12)), 30))
-        
+        searchView.setFrameSize(NSMakeSize(searchState == .Focus || !mode.isPlain ? (containerFrame.width - 10 ) : (containerFrame.width - (12 + compose.frame.width) - (proxyButton.isHidden ? 0 : proxyButton.frame.width + 3)), 30))
         
         tableView.setFrameSize(frame.width, frame.height - offset)
         
@@ -385,10 +387,12 @@ class PeerListContainerView : View {
             compose.center()
             proxyButton.setFrameOrigin(-proxyButton.frame.width, 0)
         } else {
-            compose.setFrameOrigin(searchContainer.frame.width - 12 - compose.frame.width, floorToScreenPixels(backingScaleFactor, (searchContainer.frame.height - compose.frame.height)/2.0))
-            proxyButton.setFrameOrigin(searchContainer.frame.width - 12 - compose.frame.width - proxyButton.frame.width - 6, floorToScreenPixels(backingScaleFactor, (searchContainer.frame.height - proxyButton.frame.height)/2.0))
+            compose.setFrameOrigin(searchContainer.frame.width - 0 - compose.frame.width, floorToScreenPixels(backingScaleFactor, (searchContainer.frame.height - compose.frame.height)/2.0))
+            proxyButton.setFrameOrigin(searchContainer.frame.width - 0 - compose.frame.width - proxyButton.frame.width-3, floorToScreenPixels(backingScaleFactor, (searchContainer.frame.height - proxyButton.frame.height)/2.0))
         }
-        searchView.setFrameOrigin(10, floorToScreenPixels(backingScaleFactor, (offset - searchView.frame.height)/2.0))
+        searchView.setFrameOrigin(0, floorToScreenPixels(backingScaleFactor, (offset - searchView.frame.height)/2.0))
+        
+        searchContainer.setFrameOrigin(adjustCTx, 0)
         tableView.setFrameOrigin(0, offset)
         
         proxyConnecting.centerX()
@@ -682,7 +686,7 @@ class PeersListController: TelegramGenericViewController<PeerListContainerView>,
                 searchController.navigationController = self.navigationController
                 searchController.viewWillAppear(true)
                 
-                
+                searchController.view.setFrameOrigin(rect.minX, rect.origin.y)
                 
                 if animated {
                     searchController.view.layer?.animateAlpha(from: 0.0, to: 1.0, duration: 0.25, completion:{ [weak self] complete in

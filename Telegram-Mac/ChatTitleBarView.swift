@@ -330,7 +330,6 @@ class ChatTitleBarView: TitledBarView, InteractionContentViewProtocol {
         
         let point = convert(event.locationInWindow, from: nil)
 
-        
         if NSPointInRect(point, avatarControl.frame), chatInteraction.mode != .scheduled {
             if let peer = chatInteraction.peer, let large = peer.largeProfileImage {
                 showPhotosGallery(context: chatInteraction.context, peerId: chatInteraction.peerId, firstStableId: AnyHashable(large.resource.id.uniqueId), self, nil)
@@ -343,7 +342,8 @@ class ChatTitleBarView: TitledBarView, InteractionContentViewProtocol {
                 if chatInteraction.mode != .scheduled {
                     if chatInteraction.peerId == chatInteraction.context.peerId {
                         chatInteraction.context.sharedContext.bindings.rootNavigation().push(PeerMediaController(context: chatInteraction.context, peerId: chatInteraction.peerId, tagMask: .photoOrVideo))
-                    } else {
+                    //in order to let mouse drag the window witout any action perfomed when x is somehow large enough
+                    } else if point.x < frame.width*0.3 {
                         switch chatInteraction.chatLocation {
                         case let .peer(peerId):
                             chatInteraction.openInfo(peerId, false, nil, nil)
