@@ -77,6 +77,9 @@
       location = "group:submodules/libtgvoip/libtgvoip_osx.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Telegram-Dev.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Telegram.xcodeproj">
    </FileRef>
 </Workspace>
