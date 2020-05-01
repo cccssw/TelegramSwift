@@ -6,7 +6,11 @@
 ![Telegram macOS screenshot](images/tg.png)
 
 ### Full Content Window style
-![Telegram macOS full Content Window screenshot](images/fullContentWindow.jpg)
+
+<div align="center">
+  <img style="border-width: 1px;border-color:gray;border-style: solid;" description="Telegram macOS full Content Window screenshot" src="images/fullContentWindow.jpg">
+</div>
+
 
 [**Telegram**](https://telegram.org) is a messaging app with a focus on speed and security. It’s superfast, simple, and free! This repo contains the official source code for [Telegram for macOS](https://macos.telegram.org/).
 
